@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.attraction.mapper.PoiPointMapper">
+    
+    <resultMap type="PoiPoint" id="PoiPointResult">
+        <result property="id"    column="id"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="poiName"    column="poi_name"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="latitude"    column="latitude"    />
+        <result property="description"    column="description"    />
+        <result property="operatingHours"    column="operating_hours"    />
+        <result property="voiceUrl"    column="voice_url"    />
+        <result property="mainImageUrl"    column="main_image_url"    />
+        <result property="visitCount"    column="visit_count"    />
+        <result property="isPublished"    column="is_published"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <association property="categoryName" column="category_id" javaType="String" select="selectCategoryName"/>
+    </resultMap>
+
+    <select id="selectCategoryName" resultType="String">
+        SELECT category_name FROM poi_categories WHERE id = #{categoryId}
+    </select>
+
+    <sql id="selectPoiPointVo">
+        select id, category_id, poi_name, longitude, latitude, description, operating_hours, voice_url, main_image_url, visit_count, is_published, create_time, update_time from poi_points
+    </sql>
+
+    <select id="selectPoiPointList" parameterType="PoiPoint" resultMap="PoiPointResult">
+        <include refid="selectPoiPointVo"/>
+        <where>  
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="poiName != null  and poiName != ''"> and poi_name like concat('%', #{poiName}, '%')</if>
+            <if test="isPublished != null "> and is_published = #{isPublished}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectPoiPointById" parameterType="Long" resultMap="PoiPointResult">
+        <include refid="selectPoiPointVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPoiPoint" parameterType="PoiPoint" useGeneratedKeys="true" keyProperty="id">
+        insert into poi_points
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">category_id,</if>
+            <if test="poiName != null and poiName != ''">poi_name,</if>
+            <if test="longitude != null">longitude,</if>
+            <if test="latitude != null">latitude,</if>
+            <if test="description != null">description,</if>
+            <if test="operatingHours != null">operating_hours,</if>
+            <if test="voiceUrl != null">voice_url,</if>
+            <if test="mainImageUrl != null">main_image_url,</if>
+            <if test="visitCount != null">visit_count,</if>
+            <if test="isPublished != null">is_published,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="poiName != null and poiName != ''">#{poiName},</if>
+            <if test="longitude != null">#{longitude},</if>
+            <if test="latitude != null">#{latitude},</if>
+            <if test="description != null">#{description},</if>
+            <if test="operatingHours != null">#{operatingHours},</if>
+            <if test="voiceUrl != null">#{voiceUrl},</if>
+            <if test="mainImageUrl != null">#{mainImageUrl},</if>
+            <if test="visitCount != null">#{visitCount},</if>
+            <if test="isPublished != null">#{isPublished},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePoiPoint" parameterType="PoiPoint">
+        update poi_points
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="poiName != null and poiName != ''">poi_name = #{poiName},</if>
+            <if test="longitude != null">longitude = #{longitude},</if>
+            <if test="latitude != null">latitude = #{latitude},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="operatingHours != null">operating_hours = #{operatingHours},</if>
+            <if test="voiceUrl != null">voice_url = #{voiceUrl},</if>
+            <if test="mainImageUrl != null">main_image_url = #{mainImageUrl},</if>
+            <if test="visitCount != null">visit_count = #{visitCount},</if>
+            <if test="isPublished != null">is_published = #{isPublished},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePoiPointById" parameterType="Long">
+        delete from poi_points where id = #{id}
+    </delete>
+
+    <delete id="deletePoiPointByIds" parameterType="String">
+        delete from poi_points where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.attraction.mapper.PoiCategoryMapper">
+    
+    <resultMap type="PoiCategory" id="PoiCategoryResult">
+        <result property="id"    column="id"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="iconUrl"    column="icon_url"    />
+        <result property="sortOrder"    column="sort_order"    />
+        <result property="isActive"    column="is_active"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPoiCategoryVo">
+        select id, category_name, icon_url, sort_order, is_active, create_time, update_time from poi_categories
+    </sql>
+
+    <select id="selectPoiCategoryList" parameterType="PoiCategory" resultMap="PoiCategoryResult">
+        <include refid="selectPoiCategoryVo"/>
+        <where>  
+            <if test="categoryName != null  and categoryName != ''"> and category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="isActive != null "> and is_active = #{isActive}</if>
+        </where>
+        order by sort_order
+    </select>
+    
+    <select id="selectPoiCategoryById" parameterType="Long" resultMap="PoiCategoryResult">
+        <include refid="selectPoiCategoryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPoiCategory" parameterType="PoiCategory" useGeneratedKeys="true" keyProperty="id">
+        insert into poi_categories
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryName != null and categoryName != ''">category_name,</if>
+            <if test="iconUrl != null">icon_url,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="isActive != null">is_active,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryName != null and categoryName != ''">#{categoryName},</if>
+            <if test="iconUrl != null">#{iconUrl},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="isActive != null">#{isActive},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePoiCategory" parameterType="PoiCategory">
+        update poi_categories
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryName != null and categoryName != ''">category_name = #{categoryName},</if>
+            <if test="iconUrl != null">icon_url = #{iconUrl},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="isActive != null">is_active = #{isActive},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePoiCategoryById" parameterType="Long">
+        delete from poi_categories where id = #{id}
+    </delete>
+
+    <delete id="deletePoiCategoryByIds" parameterType="String">
+        delete from poi_categories where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
