@@ -13,6 +13,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="description"    column="description"    />
         <result property="operatingHours"    column="operating_hours"    />
         <result property="voiceUrl"    column="voice_url"    />
+        <result property="voiceText"    column="voice_text"    />
+        <result property="voiceDuration"    column="voice_duration"    />
         <result property="mainImageUrl"    column="main_image_url"    />
         <result property="visitCount"    column="visit_count"    />
         <result property="isPublished"    column="is_published"    />
@@ -26,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <sql id="selectPoiPointVo">
-        select id, category_id, poi_name, longitude, latitude, description, operating_hours, voice_url, main_image_url, visit_count, is_published, create_time, update_time from poi_points
+        select id, category_id, poi_name, longitude, latitude, description, operating_hours, voice_url, voice_text, voice_duration, main_image_url, visit_count, is_published, create_time, update_time from poi_points
     </sql>
 
     <select id="selectPoiPointList" parameterType="PoiPoint" resultMap="PoiPointResult">
@@ -54,6 +56,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="description != null">description,</if>
             <if test="operatingHours != null">operating_hours,</if>
             <if test="voiceUrl != null">voice_url,</if>
+            <if test="voiceText != null">voice_text,</if>
+            <if test="voiceDuration != null">voice_duration,</if>
             <if test="mainImageUrl != null">main_image_url,</if>
             <if test="visitCount != null">visit_count,</if>
             <if test="isPublished != null">is_published,</if>
@@ -68,6 +72,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="description != null">#{description},</if>
             <if test="operatingHours != null">#{operatingHours},</if>
             <if test="voiceUrl != null">#{voiceUrl},</if>
+            <if test="voiceText != null">#{voiceText},</if>
+            <if test="voiceDuration != null">#{voiceDuration},</if>
             <if test="mainImageUrl != null">#{mainImageUrl},</if>
             <if test="visitCount != null">#{visitCount},</if>
             <if test="isPublished != null">#{isPublished},</if>
@@ -86,6 +92,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="description != null">description = #{description},</if>
             <if test="operatingHours != null">operating_hours = #{operatingHours},</if>
             <if test="voiceUrl != null">voice_url = #{voiceUrl},</if>
+            <if test="voiceText != null">voice_text = #{voiceText},</if>
+            <if test="voiceDuration != null">voice_duration = #{voiceDuration},</if>
             <if test="mainImageUrl != null">main_image_url = #{mainImageUrl},</if>
             <if test="visitCount != null">visit_count = #{visitCount},</if>
             <if test="isPublished != null">is_published = #{isPublished},</if>

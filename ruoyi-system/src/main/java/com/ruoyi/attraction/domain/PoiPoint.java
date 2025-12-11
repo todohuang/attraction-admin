@@ -51,6 +51,14 @@ public class PoiPoint extends BaseEntity
     @Excel(name = "语音导览URL")
     private String voiceUrl;
 
+    /** TTS语音文本内容 */
+    @Excel(name = "TTS语音文本")
+    private String voiceText;
+
+    /** 语音时长（秒） */
+    @Excel(name = "语音时长")
+    private Integer voiceDuration;
+
     /** 主要图片URL */
     @Excel(name = "主要图片URL")
     private String mainImageUrl;
@@ -131,11 +139,29 @@ public class PoiPoint extends BaseEntity
         this.voiceUrl = voiceUrl;
     }
 
-    public String getVoiceUrl() 
+    public String getVoiceUrl()
     {
         return voiceUrl;
     }
-    public void setMainImageUrl(String mainImageUrl) 
+    public void setVoiceText(String voiceText)
+    {
+        this.voiceText = voiceText;
+    }
+
+    public String getVoiceText()
+    {
+        return voiceText;
+    }
+    public void setVoiceDuration(Integer voiceDuration)
+    {
+        this.voiceDuration = voiceDuration;
+    }
+
+    public Integer getVoiceDuration()
+    {
+        return voiceDuration;
+    }
+    public void setMainImageUrl(String mainImageUrl)
     {
         this.mainImageUrl = mainImageUrl;
     }
@@ -182,6 +208,8 @@ public class PoiPoint extends BaseEntity
             .append("description", getDescription())
             .append("operatingHours", getOperatingHours())
             .append("voiceUrl", getVoiceUrl())
+            .append("voiceText", getVoiceText())
+            .append("voiceDuration", getVoiceDuration())
             .append("mainImageUrl", getMainImageUrl())
             .append("visitCount", getVisitCount())
             .append("isPublished", getIsPublished())

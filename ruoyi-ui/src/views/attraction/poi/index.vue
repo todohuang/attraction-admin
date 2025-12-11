@@ -95,7 +95,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -145,7 +145,26 @@
           <el-input v-model="form.operatingHours" placeholder="如: 09:00-18:00" />
         </el-form-item>
         <el-form-item label="语音URL" prop="voiceUrl">
-          <el-input v-model="form.voiceUrl" placeholder="请输入语音导览URL" />
+          <el-input v-model="form.voiceUrl" placeholder="请输入语音导览URL（优先使用）" />
+        </el-form-item>
+        <el-form-item label="音频时长" prop="voiceDuration">
+          <el-input-number
+            v-model="form.voiceDuration"
+            :min="0"
+            :max="9999"
+            placeholder="音频时长（秒）"
+            controls-position="right"
+            style="width: 200px"
+          />
+          <span style="margin-left: 10px; color: #999; font-size: 12px;">秒（仅音频文件需要填写）</span>
+        </el-form-item>
+        <el-form-item label="朗读文本" prop="voiceText">
+          <el-input
+            v-model="form.voiceText"
+            type="textarea"
+            :rows="3"
+            placeholder="语音文本内容（无语音URL时使用TTS朗读此文本）"
+          />
         </el-form-item>
         <el-form-item label="图片URL" prop="mainImageUrl">
           <el-input v-model="form.mainImageUrl" placeholder="请输入主要图片URL" />
@@ -256,6 +275,8 @@ export default {
         description: null,
         operatingHours: null,
         voiceUrl: null,
+        voiceText: null,
+        voiceDuration: null,
         mainImageUrl: null,
         visitCount: 0,
         isPublished: false
