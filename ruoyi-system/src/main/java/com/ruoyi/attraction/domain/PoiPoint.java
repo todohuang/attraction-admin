@@ -43,6 +43,10 @@ public class PoiPoint extends BaseEntity
     @Excel(name = "详细简介")
     private String description;
 
+    /** POI标签 */
+    @Excel(name = "POI标签")
+    private String tags;
+
     /** 营业时间 */
     @Excel(name = "营业时间")
     private String operatingHours;
@@ -121,9 +125,18 @@ public class PoiPoint extends BaseEntity
         this.description = description;
     }
 
-    public String getDescription() 
+    public String getDescription()
     {
         return description;
+    }
+    public void setTags(String tags)
+    {
+        this.tags = tags;
+    }
+
+    public String getTags()
+    {
+        return tags;
     }
     public void setOperatingHours(String operatingHours) 
     {
@@ -206,6 +219,7 @@ public class PoiPoint extends BaseEntity
             .append("longitude", getLongitude())
             .append("latitude", getLatitude())
             .append("description", getDescription())
+            .append("tags", getTags())
             .append("operatingHours", getOperatingHours())
             .append("voiceUrl", getVoiceUrl())
             .append("voiceText", getVoiceText())

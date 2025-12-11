@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.attraction.mapper.TourRouteMapper">
+
+    <resultMap type="TourRoute" id="TourRouteResult">
+        <result property="id"    column="id"    />
+        <result property="routeName"    column="route_name"    />
+        <result property="routeDescription"    column="route_description"    />
+        <result property="thumbnailUrl"    column="thumbnail_url"    />
+        <result property="estimatedDuration"    column="estimated_duration"    />
+        <result property="poiCount"    column="poi_count"    />
+        <result property="sortOrder"    column="sort_order"    />
+        <result property="isPublished"    column="is_published"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <resultMap type="TourRoute" id="TourRouteWithPoisResult" extends="TourRouteResult">
+        <collection property="poiList" ofType="PoiPoint" column="id" select="selectPoiListByRouteId"/>
+    </resultMap>
+
+    <sql id="selectTourRouteVo">
+        select id, route_name, route_description, thumbnail_url, estimated_duration, poi_count, sort_order, is_published, create_by, create_time, update_by, update_time, remark from tour_routes
+    </sql>
+
+    <select id="selectTourRouteList" parameterType="TourRoute" resultMap="TourRouteResult">
+        <include refid="selectTourRouteVo"/>
+        <where>
+            <if test="routeName != null  and routeName != ''"> and route_name like concat('%', #{routeName}, '%')</if>
+            <if test="isPublished != null "> and is_published = #{isPublished}</if>
+        </where>
+        order by sort_order asc, create_time desc
+    </select>
+
+    <select id="selectTourRouteById" parameterType="Long" resultMap="TourRouteResult">
+        <include refid="selectTourRouteVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectRouteWithPois" parameterType="Long" resultMap="TourRouteWithPoisResult">
+        <include refid="selectTourRouteVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectPoiListByRouteId" resultType="PoiPoint">
+        SELECT p.id, p.category_id, p.poi_name, p.longitude, p.latitude, p.description,
+               p.operating_hours, p.voice_url, p.voice_text, p.voice_duration,
+               p.main_image_url, p.visit_count, p.is_published, p.create_time, p.update_time,
+               trp.sequence_order
+        FROM poi_points p
+        INNER JOIN tour_route_pois trp ON p.id = trp.poi_id
+        WHERE trp.route_id = #{id}
+        ORDER BY trp.sequence_order ASC
+    </select>
+
+    <insert id="insertTourRoute" parameterType="TourRoute" useGeneratedKeys="true" keyProperty="id">
+        insert into tour_routes
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="routeName != null and routeName != ''">route_name,</if>
+            <if test="routeDescription != null">route_description,</if>
+            <if test="thumbnailUrl != null">thumbnail_url,</if>
+            <if test="estimatedDuration != null">estimated_duration,</if>
+            <if test="poiCount != null">poi_count,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="isPublished != null">is_published,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="routeName != null and routeName != ''">#{routeName},</if>
+            <if test="routeDescription != null">#{routeDescription},</if>
+            <if test="thumbnailUrl != null">#{thumbnailUrl},</if>
+            <if test="estimatedDuration != null">#{estimatedDuration},</if>
+            <if test="poiCount != null">#{poiCount},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="isPublished != null">#{isPublished},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTourRoute" parameterType="TourRoute">
+        update tour_routes
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="routeName != null and routeName != ''">route_name = #{routeName},</if>
+            <if test="routeDescription != null">route_description = #{routeDescription},</if>
+            <if test="thumbnailUrl != null">thumbnail_url = #{thumbnailUrl},</if>
+            <if test="estimatedDuration != null">estimated_duration = #{estimatedDuration},</if>
+            <if test="poiCount != null">poi_count = #{poiCount},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="isPublished != null">is_published = #{isPublished},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTourRouteById" parameterType="Long">
+        delete from tour_routes where id = #{id}
+    </delete>
+
+    <delete id="deleteTourRouteByIds" parameterType="String">
+        delete from tour_routes where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

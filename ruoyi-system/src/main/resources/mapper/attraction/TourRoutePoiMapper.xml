@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.attraction.mapper.TourRoutePoiMapper">
+
+    <resultMap type="TourRoutePoi" id="TourRoutePoiResult">
+        <result property="id"    column="id"    />
+        <result property="routeId"    column="route_id"    />
+        <result property="poiId"    column="poi_id"    />
+        <result property="sequenceOrder"    column="sequence_order"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectTourRoutePoiVo">
+        select id, route_id, poi_id, sequence_order, create_time from tour_route_pois
+    </sql>
+
+    <select id="selectTourRoutePoiList" parameterType="TourRoutePoi" resultMap="TourRoutePoiResult">
+        <include refid="selectTourRoutePoiVo"/>
+        <where>
+            <if test="routeId != null "> and route_id = #{routeId}</if>
+            <if test="poiId != null "> and poi_id = #{poiId}</if>
+        </where>
+        order by sequence_order asc
+    </select>
+
+    <select id="selectTourRoutePoiById" parameterType="Long" resultMap="TourRoutePoiResult">
+        <include refid="selectTourRoutePoiVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectRoutePoiList" parameterType="Long" resultType="PoiPoint">
+        SELECT p.id, p.category_id, p.poi_name, p.longitude, p.latitude, p.description,
+               p.operating_hours, p.voice_url, p.voice_text, p.voice_duration,
+               p.main_image_url, p.visit_count, p.is_published, p.create_time, p.update_time,
+               trp.sequence_order
+        FROM poi_points p
+        INNER JOIN tour_route_pois trp ON p.id = trp.poi_id
+        WHERE trp.route_id = #{routeId}
+        ORDER BY trp.sequence_order ASC
+    </select>
+
+    <insert id="insertTourRoutePoi" parameterType="TourRoutePoi" useGeneratedKeys="true" keyProperty="id">
+        insert into tour_route_pois
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="routeId != null">route_id,</if>
+            <if test="poiId != null">poi_id,</if>
+            <if test="sequenceOrder != null">sequence_order,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="routeId != null">#{routeId},</if>
+            <if test="poiId != null">#{poiId},</if>
+            <if test="sequenceOrder != null">#{sequenceOrder},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsertTourRoutePoi" parameterType="java.util.List">
+        insert into tour_route_pois (route_id, poi_id, sequence_order, create_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.routeId}, #{item.poiId}, #{item.sequenceOrder}, #{item.createTime})
+        </foreach>
+    </insert>
+
+    <update id="updateTourRoutePoi" parameterType="TourRoutePoi">
+        update tour_route_pois
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="routeId != null">route_id = #{routeId},</if>
+            <if test="poiId != null">poi_id = #{poiId},</if>
+            <if test="sequenceOrder != null">sequence_order = #{sequenceOrder},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updatePoiSequence">
+        update tour_route_pois
+        set sequence_order = #{sequenceOrder}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTourRoutePoiById" parameterType="Long">
+        delete from tour_route_pois where id = #{id}
+    </delete>
+
+    <delete id="deleteRoutePoiByRouteIdAndPoiId">
+        delete from tour_route_pois
+        where route_id = #{routeId} and poi_id = #{poiId}
+    </delete>
+
+    <delete id="deleteRoutePoiByRouteId" parameterType="Long">
+        delete from tour_route_pois where route_id = #{routeId}
+    </delete>
+
+    <delete id="deleteTourRoutePoiByIds" parameterType="String">
+        delete from tour_route_pois where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
