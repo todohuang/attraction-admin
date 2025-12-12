@@ -35,22 +35,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectTourRouteList" parameterType="TourRoute" resultMap="TourRouteResult">
-        <include refid="selectTourRouteVo"/>
+        SELECT tr.id, tr.route_name, tr.route_description, tr.thumbnail_url,
+               tr.estimated_duration, tr.sort_order, tr.is_published,
+               tr.create_by, tr.create_time, tr.update_by, tr.update_time, tr.remark,
+               COALESCE(COUNT(trp.id), 0) as poi_count
+        FROM tour_routes tr
+        LEFT JOIN tour_route_pois trp ON tr.id = trp.route_id
         <where>
-            <if test="routeName != null  and routeName != ''"> and route_name like concat('%', #{routeName}, '%')</if>
-            <if test="isPublished != null "> and is_published = #{isPublished}</if>
+            <if test="routeName != null  and routeName != ''"> and tr.route_name like concat('%', #{routeName}, '%')</if>
+            <if test="isPublished != null "> and tr.is_published = #{isPublished}</if>
         </where>
-        order by sort_order asc, create_time desc
+        GROUP BY tr.id, tr.route_name, tr.route_description, tr.thumbnail_url,
+                 tr.estimated_duration, tr.sort_order, tr.is_published,
+                 tr.create_by, tr.create_time, tr.update_by, tr.update_time, tr.remark
+        ORDER BY tr.sort_order asc, tr.create_time desc
     </select>
 
     <select id="selectTourRouteById" parameterType="Long" resultMap="TourRouteResult">
-        <include refid="selectTourRouteVo"/>
-        where id = #{id}
+        SELECT tr.id, tr.route_name, tr.route_description, tr.thumbnail_url,
+               tr.estimated_duration, tr.sort_order, tr.is_published,
+               tr.create_by, tr.create_time, tr.update_by, tr.update_time, tr.remark,
+               COALESCE(COUNT(trp.id), 0) as poi_count
+        FROM tour_routes tr
+        LEFT JOIN tour_route_pois trp ON tr.id = trp.route_id
+        WHERE tr.id = #{id}
+        GROUP BY tr.id, tr.route_name, tr.route_description, tr.thumbnail_url,
+                 tr.estimated_duration, tr.sort_order, tr.is_published,
+                 tr.create_by, tr.create_time, tr.update_by, tr.update_time, tr.remark
     </select>
 
     <select id="selectRouteWithPois" parameterType="Long" resultMap="TourRouteWithPoisResult">
-        <include refid="selectTourRouteVo"/>
-        where id = #{id}
+        SELECT tr.id, tr.route_name, tr.route_description, tr.thumbnail_url,
+               tr.estimated_duration,
+               COALESCE(COUNT(trp.id), 0) as poi_count
+        FROM tour_routes tr
+        LEFT JOIN tour_route_pois trp ON tr.id = trp.route_id
+        WHERE tr.id = #{id}
+        GROUP BY tr.id, tr.route_name, tr.route_description, tr.thumbnail_url, tr.estimated_duration
     </select>
 
     <select id="selectPoiListByRouteId" resultType="com.ruoyi.attraction.domain.vo.TourRouteDetailVO$PoiWithSequence">
