@@ -1,6 +1,8 @@
 package com.ruoyi.web.controller.h5;
 
 import com.ruoyi.common.core.domain.AjaxResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -16,6 +18,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/h5/wechat")
 public class H5WechatController {
+
+    private static final Logger log = LoggerFactory.getLogger(H5WechatController.class);
 
     @Value("${wechat.appId:}")
     private String appId;
@@ -67,7 +71,7 @@ public class H5WechatController {
 
             return AjaxResult.success(config);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("生成 JSSDK 配置失败", e);
             return AjaxResult.error("生成 JSSDK 配置失败: " + e.getMessage());
         }
     }
@@ -96,15 +100,14 @@ public class H5WechatController {
                 Integer expiresIn = (Integer) response.get("expires_in");
                 accessTokenExpireTime = System.currentTimeMillis() + (expiresIn * 1000L);
 
-                System.out.println("获取 access_token 成功，有效期: " + expiresIn + "秒");
+                log.info("获取 access_token 成功，有效期: {}秒", expiresIn);
                 return cachedAccessToken;
             } else {
-                System.err.println("获取 access_token 失败: " + response);
+                log.error("获取 access_token 失败: {}", response);
                 return null;
             }
         } catch (Exception e) {
-            System.err.println("获取 access_token 异常: " + e.getMessage());
-            e.printStackTrace();
+            log.error("获取 access_token 异常", e);
             return null;
         }
     }
@@ -138,15 +141,14 @@ public class H5WechatController {
                 Integer expiresIn = (Integer) response.get("expires_in");
                 jsapiTicketExpireTime = System.currentTimeMillis() + (expiresIn * 1000L);
 
-                System.out.println("获取 jsapi_ticket 成功，有效期: " + expiresIn + "秒");
+                log.info("获取 jsapi_ticket 成功，有效期: {}秒", expiresIn);
                 return cachedJsapiTicket;
             } else {
-                System.err.println("获取 jsapi_ticket 失败: " + response);
+                log.error("获取 jsapi_ticket 失败: {}", response);
                 return null;
             }
         } catch (Exception e) {
-            System.err.println("获取 jsapi_ticket 异常: " + e.getMessage());
-            e.printStackTrace();
+            log.error("获取 jsapi_ticket 异常", e);
             return null;
         }
     }
@@ -168,7 +170,7 @@ public class H5WechatController {
                 jsapiTicket, nonceStr, timestamp, url
             );
 
-            System.out.println("签名字符串: " + string1);
+            log.debug("签名字符串: {}", string1);
 
             // SHA1 加密
             MessageDigest digest = MessageDigest.getInstance("SHA-1");
@@ -186,7 +188,7 @@ public class H5WechatController {
 
             return hexString.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("签名生成异常", e);
             return null;
         }
     }

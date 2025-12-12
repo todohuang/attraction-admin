@@ -138,6 +138,6 @@ xss:
 # 微信公众号配置
 wechat:
   # 微信公众号 AppID（请在微信公众平台后台获取）
-  appId: YOUR_APP_ID_HERE
+  appId: wx047a1bb7fdc9c092
   # 微信公众号 AppSecret（请在微信公众平台后台获取）
-  appSecret: YOUR_APP_SECRET_HERE
+  appSecret: c77935c2ab88ac99d2f82d7a512957c2
