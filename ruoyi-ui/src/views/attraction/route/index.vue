@@ -50,7 +50,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" width="60" />
       <el-table-column label="路线名称" align="center" prop="routeName" />
-      <el-table-column label="描述" align="center" prop="description" show-overflow-tooltip />
+      <el-table-column label="描述" align="center" prop="routeDescription" show-overflow-tooltip />
       <el-table-column label="POI数量" align="center" prop="poiCount" width="80" />
       <el-table-column label="预计时长" align="center" prop="estimatedDuration" width="100" />
       <el-table-column label="排序" align="center" prop="sortOrder" width="80" />
@@ -107,8 +107,8 @@
         <el-form-item label="路线名称" prop="routeName">
           <el-input v-model="form.routeName" placeholder="请输入路线名称" />
         </el-form-item>
-        <el-form-item label="路线描述" prop="description">
-          <el-input v-model="form.description" type="textarea" :rows="3" placeholder="请输入路线描述" />
+        <el-form-item label="路线描述" prop="routeDescription">
+          <el-input v-model="form.routeDescription" type="textarea" :rows="3" placeholder="请输入路线描述" />
         </el-form-item>
         <el-form-item label="缩略图" prop="thumbnailUrl">
           <image-upload v-model="form.thumbnailUrl" :limit="1"/>
@@ -206,7 +206,7 @@ export default {
       this.form = {
         id: null,
         routeName: null,
-        description: null,
+        routeDescription: null,
         thumbnailUrl: null,
         estimatedDuration: null,
         sortOrder: 0,
