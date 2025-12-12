@@ -10,6 +10,7 @@ import com.ruoyi.attraction.mapper.TourRoutePoiMapper;
 import com.ruoyi.attraction.domain.TourRoute;
 import com.ruoyi.attraction.domain.TourRoutePoi;
 import com.ruoyi.attraction.domain.PoiPoint;
+import com.ruoyi.attraction.domain.vo.TourRouteDetailVO;
 import com.ruoyi.attraction.service.ITourRouteService;
 
 /**
@@ -55,10 +56,10 @@ public class TourRouteServiceImpl implements ITourRouteService
      * 查询路线及其POI列表
      *
      * @param id 游览路线主键
-     * @return 游览路线（包含POI列表）
+     * @return 游览路线详情（包含POI列表）
      */
     @Override
-    public TourRoute selectRouteWithPois(Long id)
+    public TourRouteDetailVO selectRouteWithPois(Long id)
     {
         return tourRouteMapper.selectRouteWithPois(id);
     }

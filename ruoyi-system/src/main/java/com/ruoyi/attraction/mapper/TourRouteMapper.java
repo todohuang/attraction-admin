@@ -2,6 +2,7 @@ package com.ruoyi.attraction.mapper;
 
 import java.util.List;
 import com.ruoyi.attraction.domain.TourRoute;
+import com.ruoyi.attraction.domain.vo.TourRouteDetailVO;
 
 /**
  * 游览路线Mapper接口
@@ -31,9 +32,9 @@ public interface TourRouteMapper
      * 查询路线及其POI列表
      *
      * @param id 游览路线主键
-     * @return 游览路线（包含POI列表）
+     * @return 游览路线详情（包含POI列表）
      */
-    public TourRoute selectRouteWithPois(Long id);
+    public TourRouteDetailVO selectRouteWithPois(Long id);
 
     /**
      * 新增游览路线

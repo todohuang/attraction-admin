@@ -20,8 +20,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"    column="remark"    />
     </resultMap>
 
-    <resultMap type="TourRoute" id="TourRouteWithPoisResult" extends="TourRouteResult">
-        <collection property="poiList" ofType="PoiPoint" column="id" select="selectPoiListByRouteId"/>
+    <resultMap type="com.ruoyi.attraction.domain.vo.TourRouteDetailVO" id="TourRouteWithPoisResult">
+        <result property="id"    column="id"    />
+        <result property="routeName"    column="route_name"    />
+        <result property="routeDescription"    column="route_description"    />
+        <result property="thumbnailUrl"    column="thumbnail_url"    />
+        <result property="estimatedDuration"    column="estimated_duration"    />
+        <result property="poiCount"    column="poi_count"    />
+        <collection property="pois" ofType="com.ruoyi.attraction.domain.vo.TourRouteDetailVO$PoiWithSequence" column="id" select="selectPoiListByRouteId"/>
     </resultMap>
 
     <sql id="selectTourRouteVo">
@@ -47,11 +53,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
-    <select id="selectPoiListByRouteId" resultType="PoiPoint">
-        SELECT p.id, p.category_id, p.poi_name, p.longitude, p.latitude, p.description,
+    <select id="selectPoiListByRouteId" resultType="com.ruoyi.attraction.domain.vo.TourRouteDetailVO$PoiWithSequence">
+        SELECT p.id, p.category_id, p.poi_name, p.longitude, p.latitude, p.description, p.tags,
                p.operating_hours, p.voice_url, p.voice_text, p.voice_duration,
                p.main_image_url, p.visit_count, p.is_published, p.create_time, p.update_time,
-               trp.sequence_order
+               trp.id as relation_id, trp.sequence_order
         FROM poi_points p
         INNER JOIN tour_route_pois trp ON p.id = trp.poi_id
         WHERE trp.route_id = #{id}

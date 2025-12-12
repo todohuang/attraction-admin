@@ -161,6 +161,20 @@ export const dynamicRoutes = [
         meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
       }
     ]
+  },
+  {
+    path: '/attraction/route/poi',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:route:edit'],
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/attraction/route/poi'),
+        name: 'RoutePoi',
+        meta: { title: '路线POI管理', activeMenu: '/attraction/route' }
+      }
+    ]
   }
 ]
 
