@@ -131,8 +131,15 @@ public class TourRouteController extends BaseController
     public AjaxResult addPoiToRoute(@RequestBody Map<String, Object> params)
     {
         Long routeId = Long.valueOf(params.get("routeId").toString());
+
+        // 前端传来的数字数组会被解析为List<Integer>，需要转换为List<Long>
         @SuppressWarnings("unchecked")
-        List<Long> poiIds = (List<Long>) params.get("poiIds");
+        List<Object> poiIdsObj = (List<Object>) params.get("poiIds");
+        List<Long> poiIds = new ArrayList<>();
+        for (Object obj : poiIdsObj)
+        {
+            poiIds.add(Long.valueOf(obj.toString()));
+        }
 
         if (routeId == null || poiIds == null || poiIds.isEmpty())
         {
@@ -198,7 +205,8 @@ public class TourRouteController extends BaseController
             for (Map<String, Object> item : sortList)
             {
                 Long id = Long.valueOf(item.get("id").toString());
-                Integer sequenceOrder = Integer.valueOf(item.get("sequenceOrder").toString());
+                // 前端传来的字段名是sortOrder，不是sequenceOrder
+                Integer sequenceOrder = Integer.valueOf(item.get("sortOrder").toString());
                 tourRoutePoiService.updatePoiSequence(id, sequenceOrder);
             }
             return AjaxResult.success();

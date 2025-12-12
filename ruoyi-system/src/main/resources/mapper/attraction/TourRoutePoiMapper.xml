@@ -31,12 +31,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectRoutePoiList" parameterType="Long" resultType="PoiPoint">
-        SELECT p.id, p.category_id, p.poi_name, p.longitude, p.latitude, p.description,
-               p.operating_hours, p.voice_url, p.voice_text, p.voice_duration,
-               p.main_image_url, p.visit_count, p.is_published, p.create_time, p.update_time,
-               trp.sequence_order
-        FROM poi_points p
-        INNER JOIN tour_route_pois trp ON p.id = trp.poi_id
+        SELECT trp.id,
+               p.id as poiId,
+               p.category_id as categoryId,
+               p.poi_name as poiName,
+               p.longitude,
+               p.latitude,
+               p.description,
+               p.operating_hours as operatingHours,
+               p.voice_url as voiceUrl,
+               p.voice_text as voiceText,
+               p.voice_duration as voiceDuration,
+               p.main_image_url as mainImageUrl,
+               p.visit_count as visitCount,
+               p.is_published as isPublished,
+               p.tags,
+               p.create_time as createTime,
+               p.update_time as updateTime,
+               trp.sequence_order as sortOrder,
+               c.category_name as categoryName
+        FROM tour_route_pois trp
+        INNER JOIN poi_points p ON p.id = trp.poi_id
+        LEFT JOIN poi_categories c ON c.id = p.category_id
         WHERE trp.route_id = #{routeId}
         ORDER BY trp.sequence_order ASC
     </select>

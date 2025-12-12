@@ -19,6 +19,9 @@ public class PoiPoint extends BaseEntity
     /** 主键ID */
     private Long id;
 
+    /** POI点位ID（用于路线POI关联表） */
+    private Long poiId;
+
     /** 所属分类ID */
     @Excel(name = "所属分类ID")
     private Long categoryId;
@@ -26,6 +29,9 @@ public class PoiPoint extends BaseEntity
     /** 所属分类名称 */
     @Excel(name = "所属分类名称")
     private String categoryName;
+
+    /** 排序序号（在路线中的顺序） */
+    private Integer sortOrder;
 
     /** POI名称 */
     @Excel(name = "POI名称")
@@ -208,6 +214,22 @@ public class PoiPoint extends BaseEntity
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public Long getPoiId() {
+        return poiId;
+    }
+
+    public void setPoiId(Long poiId) {
+        this.poiId = poiId;
+    }
+
+    public Integer getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(Integer sortOrder) {
+        this.sortOrder = sortOrder;
     }
 
     @Override
