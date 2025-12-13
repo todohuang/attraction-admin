@@ -27,6 +27,14 @@ public interface PoiPointMapper {
     public List<PoiPoint> selectPoiPointList(PoiPoint poiPoint);
 
     /**
+     * 查询POI点位信息列表 (轻量级)
+     * 
+     * @param poiPoint POI点位信息
+     * @return POI点位信息集合
+     */
+    public List<PoiPoint> selectPoiPointLiteList(PoiPoint poiPoint);
+
+    /**
      * 新增POI点位信息
      * 
      * @param poiPoint POI点位信息

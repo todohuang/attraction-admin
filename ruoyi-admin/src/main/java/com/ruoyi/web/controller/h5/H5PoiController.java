@@ -39,13 +39,22 @@ public class H5PoiController extends BaseController {
     }
 
     /**
-     * H5 - 获取所有发布状态的 POI
+     * H5 - 获取所有发布状态的 POI (轻量级列表)
      */
     @GetMapping("/poi/list")
     public AjaxResult getPoiList(PoiPoint query) {
         query.setIsPublished(true);
-        List<PoiPoint> list = poiPointService.selectPoiPointList(query);
+        List<PoiPoint> list = poiPointService.selectPoiPointLiteList(query);
         return AjaxResult.success(list);
+    }
+
+    /**
+     * H5 - 获取 POI 详情
+     */
+    @GetMapping("/poi/{id}")
+    public AjaxResult getPoiDetail(@org.springframework.web.bind.annotation.PathVariable("id") Long id) {
+        PoiPoint poi = poiPointService.selectPoiPointById(id);
+        return AjaxResult.success(poi);
     }
 
     /**

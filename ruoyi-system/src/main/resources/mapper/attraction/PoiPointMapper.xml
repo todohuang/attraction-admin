@@ -36,6 +36,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, category_id, poi_name, longitude, latitude, description, operating_hours, voice_url, voice_text, voice_duration, main_image_url, visit_count, is_published, create_time, update_time from poi_points
     </sql>
 
+    <resultMap type="PoiPoint" id="PoiPointLiteResult">
+        <result property="id"    column="id"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="poiName"    column="poi_name"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="latitude"    column="latitude"    />
+        <result property="mainImageUrl"    column="main_image_url"    />
+        <result property="visitCount"    column="visit_count"    />
+        <result property="isPublished"    column="is_published"    />
+    </resultMap>
+
+    <select id="selectPoiPointLiteList" parameterType="PoiPoint" resultMap="PoiPointLiteResult">
+        select 
+            p.id, 
+            p.category_id, 
+            pc.category_name, 
+            p.poi_name, 
+            p.longitude, 
+            p.latitude, 
+            p.main_image_url, 
+            p.visit_count, 
+            p.is_published 
+        from poi_points p
+        left join poi_categories pc on p.category_id = pc.id
+        <where>  
+            <if test="categoryId != null "> 
+                AND (
+                    p.category_id = #{categoryId} 
+                    OR 
+                    EXISTS (SELECT 1 FROM poi_category_relations pcr WHERE pcr.poi_id = p.id AND pcr.category_id = #{categoryId})
+                )
+            </if>
+            <if test="poiName != null  and poiName != ''"> and p.poi_name like concat('%', #{poiName}, '%')</if>
+            <if test="isPublished != null "> and p.is_published = #{isPublished}</if>
+        </where>
+        order by p.create_time desc
+    </select>
+
     <select id="selectPoiPointList" parameterType="PoiPoint" resultMap="PoiPointResult">
         <include refid="selectPoiPointVo"/>
         <where>  

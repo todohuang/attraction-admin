@@ -9,8 +9,7 @@ import com.ruoyi.attraction.domain.PoiPoint;
  * @author ruoyi
  * @date 2025-12-10
  */
-public interface IPoiPointService 
-{
+public interface IPoiPointService {
     /**
      * 查询POI点位信息
      * 
@@ -26,6 +25,14 @@ public interface IPoiPointService
      * @return POI点位信息集合
      */
     public List<PoiPoint> selectPoiPointList(PoiPoint poiPoint);
+
+    /**
+     * 查询POI点位信息列表 (轻量级)
+     * 
+     * @param poiPoint POI点位信息
+     * @return POI点位信息集合
+     */
+    public List<PoiPoint> selectPoiPointLiteList(PoiPoint poiPoint);
 
     /**
      * 新增POI点位信息
