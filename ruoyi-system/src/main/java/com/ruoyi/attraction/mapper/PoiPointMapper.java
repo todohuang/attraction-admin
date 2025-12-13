@@ -9,8 +9,7 @@ import com.ruoyi.attraction.domain.PoiPoint;
  * @author ruoyi
  * @date 2025-12-10
  */
-public interface PoiPointMapper 
-{
+public interface PoiPointMapper {
     /**
      * 查询POI点位信息
      * 
@@ -58,4 +57,22 @@ public interface PoiPointMapper
      * @return 结果
      */
     public int deletePoiPointByIds(Long[] ids);
+
+    /**
+     * 批量新增POI辅分类关联
+     * 
+     * @param poiId       POI ID
+     * @param categoryIds 分类ID列表
+     * @return 结果
+     */
+    public int insertPoiCategoryRelation(@org.apache.ibatis.annotations.Param("poiId") Long poiId,
+            @org.apache.ibatis.annotations.Param("categoryIds") List<Long> categoryIds);
+
+    /**
+     * 删除POI辅分类关联
+     * 
+     * @param poiId POI ID
+     * @return 结果
+     */
+    public int deletePoiCategoryRelationByPoiId(Long poiId);
 }

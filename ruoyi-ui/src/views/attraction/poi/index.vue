@@ -113,6 +113,8 @@
               <el-input v-model="form.poiName" placeholder="请输入POI名称" />
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="所属分类" prop="categoryId">
               <el-select v-model="form.categoryId" placeholder="请选择分类">
@@ -121,6 +123,19 @@
                   :key="item.id"
                   :label="item.categoryName"
                   :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="辅分类" prop="secondaryCategoryIds">
+              <el-select v-model="form.secondaryCategoryIds" multiple placeholder="请选择辅分类">
+                <el-option
+                  v-for="item in categoryOptions"
+                  :key="item.id"
+                  :label="item.categoryName"
+                  :value="item.id"
+                  :disabled="item.id === form.categoryId"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -279,6 +294,7 @@ export default {
         voiceDuration: null,
         mainImageUrl: null,
         visitCount: 0,
+        secondaryCategoryIds: [],
         isPublished: false
       };
       this.resetForm("form");

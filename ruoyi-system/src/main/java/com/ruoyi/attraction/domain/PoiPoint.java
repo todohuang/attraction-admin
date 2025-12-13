@@ -12,8 +12,7 @@ import java.math.BigDecimal;
  * @author ruoyi
  * @date 2025-12-10
  */
-public class PoiPoint extends BaseEntity
-{
+public class PoiPoint extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /** 主键ID */
@@ -77,134 +76,130 @@ public class PoiPoint extends BaseEntity
     @Excel(name = "访问热度")
     private Long visitCount;
 
+    /** 辅分类ID列表 */
+    private java.util.List<Long> secondaryCategoryIds;
+
     /** 是否发布 */
     @Excel(name = "是否发布")
     private Boolean isPublished;
 
-    public void setId(Long id) 
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() 
-    {
+    public Long getId() {
         return id;
     }
-    public void setCategoryId(Long categoryId) 
-    {
+
+    public void setSecondaryCategoryIds(java.util.List<Long> secondaryCategoryIds) {
+        this.secondaryCategoryIds = secondaryCategoryIds;
+    }
+
+    public java.util.List<Long> getSecondaryCategoryIds() {
+        return secondaryCategoryIds;
+    }
+
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 
-    public Long getCategoryId() 
-    {
+    public Long getCategoryId() {
         return categoryId;
     }
-    public void setPoiName(String poiName) 
-    {
+
+    public void setPoiName(String poiName) {
         this.poiName = poiName;
     }
 
-    public String getPoiName() 
-    {
+    public String getPoiName() {
         return poiName;
     }
-    public void setLongitude(BigDecimal longitude) 
-    {
+
+    public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
     }
 
-    public BigDecimal getLongitude() 
-    {
+    public BigDecimal getLongitude() {
         return longitude;
     }
-    public void setLatitude(BigDecimal latitude) 
-    {
+
+    public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
     }
 
-    public BigDecimal getLatitude() 
-    {
+    public BigDecimal getLatitude() {
         return latitude;
     }
-    public void setDescription(String description) 
-    {
+
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
-    public void setTags(String tags)
-    {
+
+    public void setTags(String tags) {
         this.tags = tags;
     }
 
-    public String getTags()
-    {
+    public String getTags() {
         return tags;
     }
-    public void setOperatingHours(String operatingHours) 
-    {
+
+    public void setOperatingHours(String operatingHours) {
         this.operatingHours = operatingHours;
     }
 
-    public String getOperatingHours() 
-    {
+    public String getOperatingHours() {
         return operatingHours;
     }
-    public void setVoiceUrl(String voiceUrl) 
-    {
+
+    public void setVoiceUrl(String voiceUrl) {
         this.voiceUrl = voiceUrl;
     }
 
-    public String getVoiceUrl()
-    {
+    public String getVoiceUrl() {
         return voiceUrl;
     }
-    public void setVoiceText(String voiceText)
-    {
+
+    public void setVoiceText(String voiceText) {
         this.voiceText = voiceText;
     }
 
-    public String getVoiceText()
-    {
+    public String getVoiceText() {
         return voiceText;
     }
-    public void setVoiceDuration(Integer voiceDuration)
-    {
+
+    public void setVoiceDuration(Integer voiceDuration) {
         this.voiceDuration = voiceDuration;
     }
 
-    public Integer getVoiceDuration()
-    {
+    public Integer getVoiceDuration() {
         return voiceDuration;
     }
-    public void setMainImageUrl(String mainImageUrl)
-    {
+
+    public void setMainImageUrl(String mainImageUrl) {
         this.mainImageUrl = mainImageUrl;
     }
 
-    public String getMainImageUrl() 
-    {
+    public String getMainImageUrl() {
         return mainImageUrl;
     }
-    public void setVisitCount(Long visitCount) 
-    {
+
+    public void setVisitCount(Long visitCount) {
         this.visitCount = visitCount;
     }
 
-    public Long getVisitCount() 
-    {
+    public Long getVisitCount() {
         return visitCount;
     }
-    public void setIsPublished(Boolean isPublished) 
-    {
+
+    public void setIsPublished(Boolean isPublished) {
         this.isPublished = isPublished;
     }
 
-    public Boolean getIsPublished() 
-    {
+    public Boolean getIsPublished() {
         return isPublished;
     }
 
@@ -234,23 +229,23 @@ public class PoiPoint extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("categoryId", getCategoryId())
-            .append("poiName", getPoiName())
-            .append("longitude", getLongitude())
-            .append("latitude", getLatitude())
-            .append("description", getDescription())
-            .append("tags", getTags())
-            .append("operatingHours", getOperatingHours())
-            .append("voiceUrl", getVoiceUrl())
-            .append("voiceText", getVoiceText())
-            .append("voiceDuration", getVoiceDuration())
-            .append("mainImageUrl", getMainImageUrl())
-            .append("visitCount", getVisitCount())
-            .append("isPublished", getIsPublished())
-            .append("createTime", getCreateTime())
-            .append("updateTime", getUpdateTime())
-            .toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("id", getId())
+                .append("categoryId", getCategoryId())
+                .append("poiName", getPoiName())
+                .append("longitude", getLongitude())
+                .append("latitude", getLatitude())
+                .append("description", getDescription())
+                .append("tags", getTags())
+                .append("operatingHours", getOperatingHours())
+                .append("voiceUrl", getVoiceUrl())
+                .append("voiceText", getVoiceText())
+                .append("voiceDuration", getVoiceDuration())
+                .append("mainImageUrl", getMainImageUrl())
+                .append("visitCount", getVisitCount())
+                .append("isPublished", getIsPublished())
+                .append("createTime", getCreateTime())
+                .append("updateTime", getUpdateTime())
+                .toString();
     }
 }

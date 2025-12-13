@@ -21,10 +21,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <association property="categoryName" column="category_id" javaType="String" select="selectCategoryName"/>
+        <collection property="secondaryCategoryIds" javaType="java.util.List" ofType="Long" column="id" select="selectSecondaryCategoryIds"/>
     </resultMap>
 
     <select id="selectCategoryName" resultType="String">
         SELECT category_name FROM poi_categories WHERE id = #{categoryId}
+    </select>
+
+    <select id="selectSecondaryCategoryIds" parameterType="Long" resultType="Long">
+        SELECT category_id FROM poi_category_relations WHERE poi_id = #{poiId}
     </select>
 
     <sql id="selectPoiPointVo">
@@ -34,7 +39,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectPoiPointList" parameterType="PoiPoint" resultMap="PoiPointResult">
         <include refid="selectPoiPointVo"/>
         <where>  
-            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="categoryId != null "> 
+                AND (
+                    category_id = #{categoryId} 
+                    OR 
+                    EXISTS (SELECT 1 FROM poi_category_relations pcr WHERE pcr.poi_id = poi_points.id AND pcr.category_id = #{categoryId})
+                )
+            </if>
             <if test="poiName != null  and poiName != ''"> and poi_name like concat('%', #{poiName}, '%')</if>
             <if test="isPublished != null "> and is_published = #{isPublished}</if>
         </where>
@@ -104,6 +115,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deletePoiPointById" parameterType="Long">
+        delete from poi_category_relations where poi_id = #{id};
         delete from poi_points where id = #{id}
     </delete>
 
@@ -111,6 +123,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from poi_points where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
+        </foreach>;
+        delete from poi_category_relations where poi_id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
         </foreach>
+    </delete>
+    <insert id="insertPoiCategoryRelation">
+        insert into poi_category_relations(poi_id, category_id) values
+        <foreach item="categoryId" index="index" collection="categoryIds" separator=",">
+            (#{poiId}, #{categoryId})
+        </foreach>
+    </insert>
+
+    <delete id="deletePoiCategoryRelationByPoiId" parameterType="Long">
+        delete from poi_category_relations where poi_id = #{poiId}
     </delete>
 </mapper>

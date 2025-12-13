@@ -15,8 +15,7 @@ import com.ruoyi.attraction.service.IPoiPointService;
  * @date 2025-12-10
  */
 @Service
-public class PoiPointServiceImpl implements IPoiPointService 
-{
+public class PoiPointServiceImpl implements IPoiPointService {
     @Autowired
     private PoiPointMapper poiPointMapper;
 
@@ -27,8 +26,7 @@ public class PoiPointServiceImpl implements IPoiPointService
      * @return POI点位信息
      */
     @Override
-    public PoiPoint selectPoiPointById(Long id)
-    {
+    public PoiPoint selectPoiPointById(Long id) {
         return poiPointMapper.selectPoiPointById(id);
     }
 
@@ -39,8 +37,7 @@ public class PoiPointServiceImpl implements IPoiPointService
      * @return POI点位信息
      */
     @Override
-    public List<PoiPoint> selectPoiPointList(PoiPoint poiPoint)
-    {
+    public List<PoiPoint> selectPoiPointList(PoiPoint poiPoint) {
         return poiPointMapper.selectPoiPointList(poiPoint);
     }
 
@@ -51,10 +48,11 @@ public class PoiPointServiceImpl implements IPoiPointService
      * @return 结果
      */
     @Override
-    public int insertPoiPoint(PoiPoint poiPoint)
-    {
+    public int insertPoiPoint(PoiPoint poiPoint) {
         poiPoint.setCreateTime(DateUtils.getNowDate());
-        return poiPointMapper.insertPoiPoint(poiPoint);
+        int rows = poiPointMapper.insertPoiPoint(poiPoint);
+        insertPoiCategoryRelation(poiPoint);
+        return rows;
     }
 
     /**
@@ -64,10 +62,23 @@ public class PoiPointServiceImpl implements IPoiPointService
      * @return 结果
      */
     @Override
-    public int updatePoiPoint(PoiPoint poiPoint)
-    {
+    public int updatePoiPoint(PoiPoint poiPoint) {
         poiPoint.setUpdateTime(DateUtils.getNowDate());
+        poiPointMapper.deletePoiCategoryRelationByPoiId(poiPoint.getId());
+        insertPoiCategoryRelation(poiPoint);
         return poiPointMapper.updatePoiPoint(poiPoint);
+    }
+
+    /**
+     * 新增POI辅分类关联
+     */
+    public void insertPoiCategoryRelation(PoiPoint poiPoint) {
+        java.util.List<Long> categoryIds = poiPoint.getSecondaryCategoryIds();
+        if (com.ruoyi.common.utils.StringUtils.isNotEmpty(categoryIds)) {
+            // 过滤掉主分类ID，避免重复（虽然数据库允许，但逻辑上辅分类不应包含主分类）
+            // 这里暂不过滤，让前端控制或允许重复
+            poiPointMapper.insertPoiCategoryRelation(poiPoint.getId(), categoryIds);
+        }
     }
 
     /**
@@ -77,8 +88,7 @@ public class PoiPointServiceImpl implements IPoiPointService
      * @return 结果
      */
     @Override
-    public int deletePoiPointByIds(Long[] ids)
-    {
+    public int deletePoiPointByIds(Long[] ids) {
         return poiPointMapper.deletePoiPointByIds(ids);
     }
 
@@ -89,8 +99,7 @@ public class PoiPointServiceImpl implements IPoiPointService
      * @return 结果
      */
     @Override
-    public int deletePoiPointById(Long id)
-    {
+    public int deletePoiPointById(Long id) {
         return poiPointMapper.deletePoiPointById(id);
     }
 }
