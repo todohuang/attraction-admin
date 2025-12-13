@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: process.env.VUE_APP_TITLE,
+      title: '吉安欢乐世界',
       logo: logoImg
     }
   }
