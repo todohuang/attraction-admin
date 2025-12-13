@@ -50,7 +50,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" />
       <el-table-column label="分类名称" align="center" prop="categoryName" />
-      <el-table-column label="图标URL" align="center" prop="iconUrl" :show-overflow-tooltip="true" />
+      <!-- <el-table-column label="图标URL" align="center" prop="iconUrl" :show-overflow-tooltip="true" /> -->
       <el-table-column label="排序" align="center" prop="sortOrder" />
       <el-table-column label="状态" align="center" prop="isActive">
         <template slot-scope="scope">
@@ -98,9 +98,9 @@
         <el-form-item label="分类名称" prop="categoryName">
           <el-input v-model="form.categoryName" placeholder="请输入分类名称" />
         </el-form-item>
-        <el-form-item label="图标URL" prop="iconUrl">
+        <!-- <el-form-item label="图标URL" prop="iconUrl">
           <el-input v-model="form.iconUrl" placeholder="请输入图标URL" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="排序" prop="sortOrder">
           <el-input-number v-model="form.sortOrder" controls-position="right" :min="0" />
         </el-form-item>
