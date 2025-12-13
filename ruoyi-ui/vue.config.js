@@ -7,7 +7,7 @@ function resolve(dir) {
 
 const CompressionPlugin = require('compression-webpack-plugin')
 
-const name = process.env.VUE_APP_TITLE || '吉安欢乐世界景点管理系统' // 网页标题
+const name = process.env.VUE_APP_TITLE || '吉安欢乐世界' // 网页标题
 
 const baseUrl = 'http://localhost:8080' // 后端接口
 
