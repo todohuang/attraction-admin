@@ -155,6 +155,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <delete id="deletePoiPointById" parameterType="Long">
         delete from poi_category_relations where poi_id = #{id};
+        delete from tour_route_pois where poi_id = #{id};
         delete from poi_points where id = #{id}
     </delete>
 
@@ -164,6 +165,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>;
         delete from poi_category_relations where poi_id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>;
+        delete from tour_route_pois where poi_id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
