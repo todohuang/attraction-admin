@@ -79,6 +79,13 @@ public class PoiPoint extends BaseEntity {
     /** 辅分类ID列表 */
     private java.util.List<Long> secondaryCategoryIds;
 
+    /** 所属区域代码 */
+    @Excel(name = "所属区域")
+    private String areaCode;
+
+    /** 区域颜色(关联查询字典获取) */
+    private String areaColor;
+
     /** 是否发布 */
     @Excel(name = "是否发布")
     private Boolean isPublished;
@@ -225,6 +232,22 @@ public class PoiPoint extends BaseEntity {
 
     public void setSortOrder(Integer sortOrder) {
         this.sortOrder = sortOrder;
+    }
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
+    }
+
+    public String getAreaColor() {
+        return areaColor;
+    }
+
+    public void setAreaColor(String areaColor) {
+        this.areaColor = areaColor;
     }
 
     @Override

@@ -17,6 +17,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="voiceDuration"    column="voice_duration"    />
         <result property="mainImageUrl"    column="main_image_url"    />
         <result property="visitCount"    column="visit_count"    />
+        <result property="areaCode"    column="area_code"    />
+        <result property="areaColor"    column="area_color"    />
         <result property="isPublished"    column="is_published"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
@@ -33,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <sql id="selectPoiPointVo">
-        select id, category_id, poi_name, longitude, latitude, description, operating_hours, voice_url, voice_text, voice_duration, main_image_url, visit_count, is_published, create_time, update_time from poi_points
+        select id, category_id, poi_name, longitude, latitude, description, operating_hours, voice_url, voice_text, voice_duration, main_image_url, visit_count, area_code, is_published, create_time, update_time from poi_points
     </sql>
 
     <resultMap type="PoiPoint" id="PoiPointLiteResult">
@@ -45,6 +47,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="latitude"    column="latitude"    />
         <result property="mainImageUrl"    column="main_image_url"    />
         <result property="visitCount"    column="visit_count"    />
+        <result property="areaCode"    column="area_code"    />
+        <result property="areaColor"    column="area_color"    />
         <result property="isPublished"    column="is_published"    />
     </resultMap>
 
@@ -58,6 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             p.latitude, 
             p.main_image_url, 
             p.visit_count, 
+            p.area_code,
             p.is_published 
         from poi_points p
         left join poi_categories pc on p.category_id = pc.id
@@ -69,8 +74,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     EXISTS (SELECT 1 FROM poi_category_relations pcr WHERE pcr.poi_id = p.id AND pcr.category_id = #{categoryId})
                 )
             </if>
-            <if test="poiName != null  and poiName != ''"> and p.poi_name like concat('%', #{poiName}, '%')</if>
-            <if test="isPublished != null "> and p.is_published = #{isPublished}</if>
+            <if test="poiName != null  and poiName != ''">and p.poi_name like concat('%', #{poiName}, '%')</if>
+            <if test="isPublished != null ">and p.is_published = #{isPublished}</if>
         </where>
         order by p.create_time desc
     </select>
@@ -86,6 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 )
             </if>
             <if test="poiName != null  and poiName != ''"> and poi_name like concat('%', #{poiName}, '%')</if>
+            <if test="areaCode != null and areaCode != ''"> and area_code = #{areaCode}</if>
             <if test="isPublished != null "> and is_published = #{isPublished}</if>
         </where>
         order by create_time desc
@@ -110,6 +116,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="voiceDuration != null">voice_duration,</if>
             <if test="mainImageUrl != null">main_image_url,</if>
             <if test="visitCount != null">visit_count,</if>
+            <if test="areaCode != null">area_code,</if>
             <if test="isPublished != null">is_published,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
@@ -126,6 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="voiceDuration != null">#{voiceDuration},</if>
             <if test="mainImageUrl != null">#{mainImageUrl},</if>
             <if test="visitCount != null">#{visitCount},</if>
+            <if test="areaCode != null">#{areaCode},</if>
             <if test="isPublished != null">#{isPublished},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
@@ -146,6 +154,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="voiceDuration != null">voice_duration = #{voiceDuration},</if>
             <if test="mainImageUrl != null">main_image_url = #{mainImageUrl},</if>
             <if test="visitCount != null">visit_count = #{visitCount},</if>
+            <if test="areaCode != null">area_code = #{areaCode},</if>
             <if test="isPublished != null">is_published = #{isPublished},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
@@ -154,21 +163,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deletePoiPointById" parameterType="Long">
-        delete from poi_category_relations where poi_id = #{id};
-        delete from tour_route_pois where poi_id = #{id};
         delete from poi_points where id = #{id}
     </delete>
 
     <delete id="deletePoiPointByIds" parameterType="String">
         delete from poi_points where id in 
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
-        </foreach>;
-        delete from poi_category_relations where poi_id in 
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
-        </foreach>;
-        delete from tour_route_pois where poi_id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

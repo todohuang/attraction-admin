@@ -9,6 +9,18 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      
+      <el-form-item label="所属区域" prop="areaCode">
+        <el-select v-model="queryParams.areaCode" placeholder="请选择所属区域" clearable>
+          <el-option
+            v-for="dict in dict.type.attraction_area"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      
       <el-form-item label="分类" prop="categoryId">
         <el-select v-model="queryParams.categoryId" placeholder="请选择分类" clearable>
           <el-option
@@ -61,9 +73,17 @@
       <el-table-column label="ID" align="center" prop="id" width="60" />
       <el-table-column label="POI名称" align="center" prop="poiName" />
       <el-table-column label="分类" align="center" prop="categoryName" />
+      <el-table-column label="所属区域" align="center" prop="areaCode" width="100">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.areaCode === 'animal_kingdom'" type="success">动物王国</el-tag>
+          <el-tag v-else-if="scope.row.areaCode === 'fantasy_town'" type="danger">奇幻小镇</el-tag>
+          <el-tag v-else-if="scope.row.areaCode === 'mechanical_tribe'" style="background-color: #8B5CF6; color: white; border-color: #8B5CF6;">机械部落</el-tag>
+          <el-tag v-else-if="scope.row.areaCode === 'storm_bay'" type="primary">风暴湾</el-tag>
+          <span v-else style="color: #909399;">-</span>
+        </template>
+      </el-table-column>
       <el-table-column label="经度" align="center" prop="longitude" />
       <el-table-column label="纬度" align="center" prop="latitude" />
-      <el-table-column label="访问量" align="center" prop="visitCount" width="80" />
       <el-table-column label="发布状态" align="center" prop="isPublished" width="80">
         <template slot-scope="scope">
           <el-tag :type="scope.row.isPublished ? 'success' : 'info'">
@@ -113,6 +133,18 @@
               <el-input v-model="form.poiName" placeholder="请输入POI名称" />
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="所属区域" prop="areaCode">
+              <el-select v-model="form.areaCode" placeholder="请选择所属区域" clearable>
+                <el-option
+                  v-for="dict in dict.type.attraction_area"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
@@ -141,6 +173,7 @@
             </el-form-item>
           </el-col>
         </el-row>
+        
         <el-row>
           <el-col :span="12">
             <el-form-item label="经度" prop="longitude">
@@ -205,6 +238,7 @@ import { listCategory } from "@/api/attraction/category";
 
 export default {
   name: "Poi",
+  dicts: ['attraction_area'],
   data() {
     return {
       // 遮罩层
@@ -233,6 +267,7 @@ export default {
         pageSize: 10,
         categoryId: null,
         poiName: null,
+        areaCode: null,
         isPublished: null
       },
       // 表单参数
@@ -294,6 +329,7 @@ export default {
         voiceDuration: null,
         mainImageUrl: null,
         visitCount: 0,
+        areaCode: null,
         secondaryCategoryIds: [],
         isPublished: false
       };

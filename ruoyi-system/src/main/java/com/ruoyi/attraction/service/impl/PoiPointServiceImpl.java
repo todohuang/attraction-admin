@@ -100,6 +100,11 @@ public class PoiPointServiceImpl implements IPoiPointService {
      */
     @Override
     public int deletePoiPointByIds(Long[] ids) {
+        // 先删除每个POI的辅分类关联
+        for (Long id : ids) {
+            poiPointMapper.deletePoiCategoryRelationByPoiId(id);
+        }
+        // 再批量删除POI主表数据
         return poiPointMapper.deletePoiPointByIds(ids);
     }
 
@@ -111,6 +116,9 @@ public class PoiPointServiceImpl implements IPoiPointService {
      */
     @Override
     public int deletePoiPointById(Long id) {
+        // 先删除辅分类关联
+        poiPointMapper.deletePoiCategoryRelationByPoiId(id);
+        // 再删除POI主表数据
         return poiPointMapper.deletePoiPointById(id);
     }
 }
