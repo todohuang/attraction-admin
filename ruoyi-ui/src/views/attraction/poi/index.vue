@@ -149,7 +149,7 @@
         <el-row>
           <el-col :span="20">
             <el-form-item label="图标类型">
-              <el-radio-group v-model="form.iconType">
+              <el-radio-group v-model="form.iconType" @change="handleIconTypeChange">
                 <el-radio label="default">默认</el-radio>
                 <el-radio label="emoji">Emoji</el-radio>
                 <el-radio label="image">图片</el-radio>
@@ -159,7 +159,17 @@
         </el-row>
 
         <el-form-item label="图标内容" v-if="form.iconType !== 'default'">
-          <el-input v-if="form.iconType === 'emoji'" v-model="form.iconValue" placeholder="请输入Emoji字符 (如: 🚻)" style="width: 200px" />
+          <div v-if="form.iconType === 'emoji'">
+            <el-input v-model="form.iconValue" placeholder="请输入Emoji字符 (如: 🚻)" style="width: 200px; margin-bottom: 10px;" />
+            <div class="emoji-picker">
+              <div v-for="group in emojiGroups" :key="group.label" class="emoji-group">
+                <span class="group-label">{{ group.label }}</span>
+                <div class="emoji-list">
+                  <span v-for="e in group.emojis" :key="e" class="emoji-item" @click="form.iconValue = e">{{ e }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
           <image-upload v-if="form.iconType === 'image'" v-model="form.iconValue" :limit="1" />
         </el-form-item>
 
@@ -258,6 +268,17 @@ export default {
   dicts: ['attraction_area'],
   data() {
     return {
+      // 常用Emoji分组
+      emojiGroups: [
+        { label: '医疗与救助', emojis: ['🚑', '⛑️', '🏥', '🆘', '➕', '💊', '💉', '🩺', '🩹', '🧪', '🚨', '🛟', '⚕️', '🌡️', '🤒', '🤕', '🦷'] },
+        { label: '母婴与关怀', emojis: ['🚼', '🍼', '👶', '🤱', '🧸', '🧒', '�', '👦', '👦🏻', '👧🏻', '👶🏻', '🧸', '🎀', '🎈', '🎠', '🍭', '👫'] },
+        { label: '商店与购物', emojis: ['🛍️', '🛒', '👜', '🎁', '🍦', '🥤', '🍬', '🍭', '🍫', '🧸', '🎈', '🎨', '📚', '👟', '👕', '👒', '💄', '💍', '💎', '🧢', '🕶️', '👒', '🏮', '🪁'] },
+        { label: '餐厅与美食', emojis: ['🥘', '🍔', '🍛', '🍜', '🍝', '🍕', '🍲', '🍱', '🥟', '🍢', '🍣', '🍦', '🍰', '🥤', '🍺', '🥪', '🍳', '🍢', '🍡', '🍵', '🥨', '🥐', '🥯', '🥗', '🍿', '🍧', '🍩', '🍫', '🥓'] },
+        { label: '卫生间与洗漱', emojis: ['🚻', '🚹', '🚺', '🚽', '🧼', '🧻', '🧴', '🚿', '🚰', '🛀', '🧼', '🪒', '🧽', '🧹', '🧺'] },
+        { label: '停车场与交通', emojis: ['🅿️', '🚗', '🚌', '🏍️', '🚲', '🚐', '🚕', '🔋', '🚏', '🚉', '🚆', '🛶', '🚡', '🚠', '🛥️', '🚢', '⚓', '⛽'] },
+        { label: '景观与娱乐', emojis: ['🎡', '🎢', '🎠', '🎟️', '🎭', '⛰️', '🏠', '🚬', '📷', '🗺️', '🚩', '⛺', '🌲', '🌸', '⛲', '⛩️', '🗿', '🔭', '🧗', '🚣', '🎣', '🎨', '🎺', '🎸', '🎻', '🎷', '🎆'] },
+        { label: '服务与告示', emojis: ['ℹ️', '🛎️', '🛄', '🛂', '🎫', '📞', '📡', '📢', '🔇', '🚶', '🏃', '🧳', '🔑', '🚪', '📪', '📮', '📤', '📥', '📫'] }
+      ],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -325,6 +346,16 @@ export default {
       listCategory({pageNum: 1, pageSize: 100}).then(response => {
         this.categoryOptions = response.rows;
       });
+    },
+    // 图标类型切换逻辑 (增加智能判断，防止误删回显数据)
+    handleIconTypeChange(val) {
+      if (val === 'emoji' && this.form.iconValue && this.form.iconValue.startsWith('/')) {
+        // 如果切到 Emoji，但当前值是图片路径，则清空
+        this.form.iconValue = '';
+      } else if (val === 'image' && this.form.iconValue && !this.form.iconValue.startsWith('/')) {
+        // 如果切到图片，但当前值不是路径（可能是Emoji），则清空
+        this.form.iconValue = '';
+      }
     },
     // 取消按钮
     cancel() {
@@ -419,3 +450,46 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.emoji-picker {
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  padding: 10px;
+  max-height: 250px;
+  overflow-y: auto;
+  background: #f8f9fb;
+}
+.emoji-group {
+  margin-bottom: 12px;
+}
+.emoji-group:last-child {
+  margin-bottom: 0;
+}
+.group-label {
+  display: block;
+  font-size: 12px;
+  color: #909399;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+.emoji-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.emoji-item {
+  font-size: 22px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  line-height: 1;
+}
+.emoji-item:hover {
+  background: #fff;
+  transform: scale(1.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+</style>
+
