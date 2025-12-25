@@ -147,6 +147,23 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="20">
+            <el-form-item label="图标类型">
+              <el-radio-group v-model="form.iconType">
+                <el-radio label="default">默认</el-radio>
+                <el-radio label="emoji">Emoji</el-radio>
+                <el-radio label="image">图片</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-form-item label="图标内容" v-if="form.iconType !== 'default'">
+          <el-input v-if="form.iconType === 'emoji'" v-model="form.iconValue" placeholder="请输入Emoji字符 (如: 🚻)" style="width: 200px" />
+          <image-upload v-if="form.iconType === 'image'" v-model="form.iconValue" :limit="1" />
+        </el-form-item>
+
+        <el-row>
           <el-col :span="12">
             <el-form-item label="所属分类" prop="categoryId">
               <el-select v-model="form.categoryId" placeholder="请选择分类">
@@ -331,6 +348,8 @@ export default {
         visitCount: 0,
         areaCode: null,
         secondaryCategoryIds: [],
+        iconType: 'default',
+        iconValue: null,
         isPublished: false
       };
       this.resetForm("form");

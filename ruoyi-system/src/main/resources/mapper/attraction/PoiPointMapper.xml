@@ -19,6 +19,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="visitCount"    column="visit_count"    />
         <result property="areaCode"    column="area_code"    />
         <result property="areaColor"    column="area_color"    />
+        <result property="iconType"    column="icon_type"    />
+        <result property="iconValue"    column="icon_value"    />
         <result property="isPublished"    column="is_published"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
@@ -35,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <sql id="selectPoiPointVo">
-        select id, category_id, poi_name, longitude, latitude, description, operating_hours, voice_url, voice_text, voice_duration, main_image_url, visit_count, area_code, is_published, create_time, update_time from poi_points
+        select id, category_id, poi_name, longitude, latitude, description, operating_hours, voice_url, voice_text, voice_duration, main_image_url, visit_count, area_code, icon_type, icon_value, is_published, create_time, update_time from poi_points
     </sql>
 
     <resultMap type="PoiPoint" id="PoiPointLiteResult">
@@ -49,6 +51,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="visitCount"    column="visit_count"    />
         <result property="areaCode"    column="area_code"    />
         <result property="areaColor"    column="area_color"    />
+        <result property="iconType"    column="icon_type"    />
+        <result property="iconValue"    column="icon_value"    />
         <result property="isPublished"    column="is_published"    />
     </resultMap>
 
@@ -63,6 +67,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             p.main_image_url, 
             p.visit_count, 
             p.area_code,
+            p.icon_type,
+            p.icon_value,
             p.is_published 
         from poi_points p
         left join poi_categories pc on p.category_id = pc.id
@@ -117,6 +123,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mainImageUrl != null">main_image_url,</if>
             <if test="visitCount != null">visit_count,</if>
             <if test="areaCode != null">area_code,</if>
+            <if test="iconType != null">icon_type,</if>
+            <if test="iconValue != null">icon_value,</if>
             <if test="isPublished != null">is_published,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
@@ -134,6 +142,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mainImageUrl != null">#{mainImageUrl},</if>
             <if test="visitCount != null">#{visitCount},</if>
             <if test="areaCode != null">#{areaCode},</if>
+            <if test="iconType != null">#{iconType},</if>
+            <if test="iconValue != null">#{iconValue},</if>
             <if test="isPublished != null">#{isPublished},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
@@ -155,6 +165,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mainImageUrl != null">main_image_url = #{mainImageUrl},</if>
             <if test="visitCount != null">visit_count = #{visitCount},</if>
             <if test="areaCode != null">area_code = #{areaCode},</if>
+            <if test="iconType != null">icon_type = #{iconType},</if>
+            <if test="iconValue != null">icon_value = #{iconValue},</if>
             <if test="isPublished != null">is_published = #{isPublished},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>

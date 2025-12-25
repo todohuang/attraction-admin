@@ -250,6 +250,30 @@ public class PoiPoint extends BaseEntity {
         this.areaColor = areaColor;
     }
 
+    /** 图标类型 (default/emoji/image) */
+    @Excel(name = "图标类型")
+    private String iconType;
+
+    /** 图标值 (Emoji字符或图片URL) */
+    @Excel(name = "图标值")
+    private String iconValue;
+
+    public void setIconType(String iconType) {
+        this.iconType = iconType;
+    }
+
+    public String getIconType() {
+        return iconType;
+    }
+
+    public void setIconValue(String iconValue) {
+        this.iconValue = iconValue;
+    }
+
+    public String getIconValue() {
+        return iconValue;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
