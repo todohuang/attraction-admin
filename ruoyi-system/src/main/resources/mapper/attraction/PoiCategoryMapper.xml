@@ -8,6 +8,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="categoryName"    column="category_name"    />
         <result property="iconUrl"    column="icon_url"    />
+        <result property="iconType"    column="icon_type"    />
+        <result property="iconValue"    column="icon_value"    />
         <result property="sortOrder"    column="sort_order"    />
         <result property="isActive"    column="is_active"    />
         <result property="createTime"    column="create_time"    />
@@ -15,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPoiCategoryVo">
-        select id, category_name, icon_url, sort_order, is_active, create_time, update_time from poi_categories
+        select id, category_name, icon_url, icon_type, icon_value, sort_order, is_active, create_time, update_time from poi_categories
     </sql>
 
     <select id="selectPoiCategoryList" parameterType="PoiCategory" resultMap="PoiCategoryResult">
@@ -37,6 +39,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="categoryName != null and categoryName != ''">category_name,</if>
             <if test="iconUrl != null">icon_url,</if>
+            <if test="iconType != null">icon_type,</if>
+            <if test="iconValue != null">icon_value,</if>
             <if test="sortOrder != null">sort_order,</if>
             <if test="isActive != null">is_active,</if>
             <if test="createTime != null">create_time,</if>
@@ -45,6 +49,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="categoryName != null and categoryName != ''">#{categoryName},</if>
             <if test="iconUrl != null">#{iconUrl},</if>
+            <if test="iconType != null">#{iconType},</if>
+            <if test="iconValue != null">#{iconValue},</if>
             <if test="sortOrder != null">#{sortOrder},</if>
             <if test="isActive != null">#{isActive},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -57,6 +63,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="categoryName != null and categoryName != ''">category_name = #{categoryName},</if>
             <if test="iconUrl != null">icon_url = #{iconUrl},</if>
+            <if test="iconType != null">icon_type = #{iconType},</if>
+            <if test="iconValue != null">icon_value = #{iconValue},</if>
             <if test="sortOrder != null">sort_order = #{sortOrder},</if>
             <if test="isActive != null">is_active = #{isActive},</if>
             <if test="createTime != null">create_time = #{createTime},</if>

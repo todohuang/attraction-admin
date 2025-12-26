@@ -12,8 +12,7 @@ import java.math.BigDecimal;
  * @author ruoyi
  * @date 2025-12-10
  */
-public class PoiCategory extends BaseEntity
-{
+public class PoiCategory extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /** 主键ID */
@@ -27,6 +26,14 @@ public class PoiCategory extends BaseEntity
     @Excel(name = "分类图标URL")
     private String iconUrl;
 
+    /** 图标类型 (default, emoji, image) */
+    @Excel(name = "图标类型")
+    private String iconType;
+
+    /** 图标内容 (Emoji字符或图片路径) */
+    @Excel(name = "图标内容")
+    private String iconValue;
+
     /** 排序 */
     @Excel(name = "排序")
     private Long sortOrder;
@@ -35,62 +42,74 @@ public class PoiCategory extends BaseEntity
     @Excel(name = "是否启用")
     private Boolean isActive;
 
-    public void setId(Long id) 
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() 
-    {
+    public Long getId() {
         return id;
     }
-    public void setCategoryName(String categoryName) 
-    {
+
+    public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
 
-    public String getCategoryName() 
-    {
+    public String getCategoryName() {
         return categoryName;
     }
-    public void setIconUrl(String iconUrl) 
-    {
+
+    public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
     }
 
-    public String getIconUrl() 
-    {
+    public String getIconUrl() {
         return iconUrl;
     }
-    public void setSortOrder(Long sortOrder) 
-    {
+
+    public void setIconType(String iconType) {
+        this.iconType = iconType;
+    }
+
+    public String getIconType() {
+        return iconType;
+    }
+
+    public void setIconValue(String iconValue) {
+        this.iconValue = iconValue;
+    }
+
+    public String getIconValue() {
+        return iconValue;
+    }
+
+    public void setSortOrder(Long sortOrder) {
         this.sortOrder = sortOrder;
     }
 
-    public Long getSortOrder() 
-    {
+    public Long getSortOrder() {
         return sortOrder;
     }
-    public void setIsActive(Boolean isActive) 
-    {
+
+    public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
     }
 
-    public Boolean getIsActive() 
-    {
+    public Boolean getIsActive() {
         return isActive;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("categoryName", getCategoryName())
-            .append("iconUrl", getIconUrl())
-            .append("sortOrder", getSortOrder())
-            .append("isActive", getIsActive())
-            .append("createTime", getCreateTime())
-            .append("updateTime", getUpdateTime())
-            .toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("id", getId())
+                .append("categoryName", getCategoryName())
+                .append("iconUrl", getIconUrl())
+                .append("iconType", getIconType())
+                .append("iconValue", getIconValue())
+                .append("sortOrder", getSortOrder())
+                .append("isActive", getIsActive())
+                .append("createTime", getCreateTime())
+                .append("updateTime", getUpdateTime())
+                .toString();
     }
 }
