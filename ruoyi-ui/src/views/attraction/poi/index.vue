@@ -219,19 +219,21 @@
         <el-form-item label="营业时间" prop="operatingHours">
           <el-input v-model="form.operatingHours" placeholder="如: 09:00-18:00" />
         </el-form-item>
-        <el-form-item label="语音URL" prop="voiceUrl">
-          <el-input v-model="form.voiceUrl" placeholder="请输入语音导览URL（优先使用）" />
-        </el-form-item>
-        <el-form-item label="音频时长" prop="voiceDuration">
-          <el-input-number
-            v-model="form.voiceDuration"
-            :min="0"
-            :max="9999"
-            placeholder="音频时长（秒）"
-            controls-position="right"
-            style="width: 200px"
+        <el-form-item label="语音文件" prop="voiceUrl">
+          <file-upload
+            v-model="form.voiceUrl"
+            :limit="1"
+            :file-size="20"
+            :file-type="['mp3', 'wav', 'm4a', 'ogg', 'aac']"
+            @upload-success="handleVoiceUploadSuccess"
           />
-          <span style="margin-left: 10px; color: #999; font-size: 12px;">秒（仅音频文件需要填写）</span>
+          <div v-if="form.voiceDuration" style="margin-top: 10px;">
+            <el-tag type="info" size="medium">
+              <i class="el-icon-time"></i>
+              时长: {{ form.voiceDuration }}秒
+              <span style="color: #909399;">({{ formatDuration(form.voiceDuration) }})</span>
+            </el-tag>
+          </div>
         </el-form-item>
         <el-form-item label="朗读文本" prop="voiceText">
           <el-input
@@ -241,7 +243,7 @@
             placeholder="语音文本内容（无语音URL时使用TTS朗读此文本）"
           />
         </el-form-item>
-        <el-form-item label="图片URL" prop="mainImageUrl">
+        <el-form-item label="图片URL" prop="mainImageUrl" v-if="false">
           <el-input v-model="form.mainImageUrl" placeholder="请输入主要图片URL" />
         </el-form-item>
         <el-form-item label="是否发布">
@@ -446,6 +448,39 @@ export default {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
+    },
+    /** 音频上传成功后自动获取时长 */
+    handleVoiceUploadSuccess(fileList) {
+      if (fileList && fileList.length > 0) {
+        const audioFile = fileList[fileList.length - 1]; // 获取最新上传的文件
+        const audioUrl = this.getFullUrl(audioFile.url);
+        
+        // 使用 Audio API 读取音频时长
+        const audio = new Audio(audioUrl);
+        audio.addEventListener('loadedmetadata', () => {
+          const duration = Math.round(audio.duration); // 四舍五入到整数秒
+          this.form.voiceDuration = duration;
+          this.$modal.msgSuccess(`已自动获取音频时长: ${duration}秒`);
+        });
+        audio.addEventListener('error', () => {
+          this.$modal.msgWarning('无法自动获取音频时长，请手动输入');
+        });
+      }
+    },
+    /** 获取完整的文件URL */
+    getFullUrl(url) {
+      const baseUrl = process.env.VUE_APP_BASE_API;
+      if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+      }
+      return baseUrl + url;
+    },
+    /** 格式化音频时长（秒转分:秒） */
+    formatDuration(seconds) {
+      if (!seconds || seconds === 0) return '0分00秒';
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      return `${minutes}分${remainingSeconds.toString().padStart(2, '0')}秒`;
     }
   }
 };

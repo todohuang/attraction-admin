@@ -211,6 +211,7 @@ export default {
         this.uploadList = []
         this.number = 0
         this.$emit("input", this.listToString(this.fileList))
+        this.$emit("upload-success", this.fileList) // 触发上传成功事件，传递文件列表
         this.$modal.closeLoading()
       }
     },
