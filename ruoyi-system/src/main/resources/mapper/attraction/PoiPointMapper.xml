@@ -47,6 +47,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="poiName"    column="poi_name"    />
         <result property="longitude"    column="longitude"    />
         <result property="latitude"    column="latitude"    />
+        <result property="voiceUrl"    column="voice_url"    />
+        <result property="voiceDuration"    column="voice_duration"    />
         <result property="mainImageUrl"    column="main_image_url"    />
         <result property="visitCount"    column="visit_count"    />
         <result property="areaCode"    column="area_code"    />
@@ -64,6 +66,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             p.poi_name, 
             p.longitude, 
             p.latitude, 
+            p.voice_url,
+            p.voice_duration,
             p.main_image_url, 
             p.visit_count, 
             p.area_code,
