@@ -201,8 +201,10 @@ export default {
     },
     // 删除文件
     handleDelete(index) {
+      const deletedFile = this.fileList[index]; // 保存被删除的文件信息
       this.fileList.splice(index, 1)
       this.$emit("input", this.listToString(this.fileList))
+      this.$emit("file-remove", deletedFile) // 触发文件删除事件
     },
     // 上传结束处理
     uploadedSuccessfully() {

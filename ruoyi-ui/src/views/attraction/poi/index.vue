@@ -226,6 +226,7 @@
             :file-size="20"
             :file-type="['mp3', 'wav', 'm4a', 'ogg', 'aac']"
             @upload-success="handleVoiceUploadSuccess"
+            @file-remove="handleVoiceFileRemove"
           />
           <div v-if="form.voiceDuration" style="margin-top: 10px;">
             <el-tag type="info" size="medium">
@@ -481,6 +482,11 @@ export default {
       const minutes = Math.floor(seconds / 60);
       const remainingSeconds = seconds % 60;
       return `${minutes}分${remainingSeconds.toString().padStart(2, '0')}秒`;
+    },
+    /** 音频文件删除后清空时长 */
+    handleVoiceFileRemove() {
+      this.form.voiceDuration = null;
+      this.$modal.msgInfo('已清空音频时长');
     }
   }
 };
