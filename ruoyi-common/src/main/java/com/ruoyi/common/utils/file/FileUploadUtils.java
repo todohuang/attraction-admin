@@ -255,6 +255,6 @@ public class FileUploadUtils
         {
             extension = MimeTypeUtils.getExtension(Objects.requireNonNull(file.getContentType()));
         }
-        return extension;
+        return extension.toLowerCase();
     }
 }
